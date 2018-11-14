@@ -29,9 +29,4 @@ def get_factors(number):
 ##def get_factors(number):
 ##    return [i for i in range(1,floor(number/2)+1) if n%i == 0]
 
-if __name__ == '__main__':
-
-    factors = get_factors(600851475143)
-    prime_factors = [e for e in factors if len(get_factors(e)) == 2]
-    print(max(prime_factors))
     

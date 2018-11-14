@@ -6,17 +6,19 @@ def multiply(numbers,val):
 
 class GridTraversal:
 
-    def __init__(self, grid_file = None,dimensions=20):
+    def __init__(self, grid_file = None,dimensions=20,seed=50):
         if grid_file:
             with open('grid.txt') as grid:
                 self.grid = [e.strip('\n').split() for e in grid.readlines()]
         else:
-            self.grid = self.generate_grid(dimensions)
+            self.grid = self.generate_grid(dimensions,seed)
+        self.seed = seed
         self.grid_coords = [(i,j) for i in range(len(self.grid)) for j in range(len(self.grid))]
         self.directions = ['up','up right','right','down right',
                       'down','down left','left','up left']
 
-    def generate_grid(self,dimensions):
+    def generate_grid(self,dimensions,s):
+        random.seed(s)
         return [[str(random.randint(0,100)) for _ in range(dimensions)] for _ in range(dimensions)]
 
     def get_numbers(self,x,y,path,direction,of_length):
@@ -98,8 +100,13 @@ class GridTraversal:
             paths_dict[(self.grid[cell[0]][cell[1]],cell)] = directions_dict
         return paths_dict
 
+    def print_current_grid(self):
+        with open('grid_'+str(self.seed)+'.txt','w') as grid:
+            for line in self.grid:
+                print(' '.join(line),file=grid)
+
 traversal = GridTraversal(dimensions=250)
-possible_paths = traversal.get_all_possible_paths(length=14)
+possible_paths = traversal.get_all_possible_paths(length=86)
 max_product = max([(multiply([int(i) for i in e],1),e,k1[1],k2) for k1,v in possible_paths.items() for k2,e in v.items() if e],key=lambda x:x[0])
 
 print('The max product is: ',max_product[0])
